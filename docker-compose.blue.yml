@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  ml-service-blue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ml-service-blue
+    environment:
+      - MODEL_VERSION=v1.0.0
+    ports:
+      - "8081:8080"
+    networks:
+      - ml-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  ml-network:
+    external: true
+

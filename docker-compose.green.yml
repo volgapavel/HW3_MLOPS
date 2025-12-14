@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  ml-service-green:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ml-service-green
+    environment:
+      - MODEL_VERSION=v1.1.0
+    ports:
+      - "8082:8080"
+    networks:
+      - ml-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  ml-network:
+    external: true
+
